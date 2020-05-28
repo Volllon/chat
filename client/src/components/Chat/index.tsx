@@ -65,8 +65,8 @@ const Chat: FC<Props> = ({
           className="messages"
           ref={messagesRef}
         >
-          {messages.map((message: Message) => (
-            <div className="message">
+          {messages.map((message: Message, index: number) => (
+            <div className="message" key={message.userName + index}>
               <p>{message.text}</p>
               <div>
                 <span>{message.userName}</span>
