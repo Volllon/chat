@@ -1,4 +1,4 @@
-import React, {FC, ChangeEvent } from 'react';
+import React, { FC, ChangeEvent } from 'react';
 import getValidationStatusClass from '../../../scripts/getValidationStatusClass';
 import isValidInput from '../../../scripts/isValidInput';
 import { InputProps } from '../../../types';

@@ -1,8 +1,8 @@
-import React, {FC, ChangeEvent } from 'react';
-import getValidationStatusClass from '../../../scripts/getValidationStatusClass';
-import isValidInput from '../../../scripts/isValidInput';
-import { InputProps } from '../../../types';
-import getTooltipAttributes from '../../../scripts/getTooltipAttributes';
+import React, { FC, ChangeEvent } from 'react';
+import getValidationStatusClass from '../../scripts/getValidationStatusClass';
+import isValidInput from '../../scripts/isValidInput';
+import getTooltipAttributes from '../../scripts/getTooltipAttributes';
+import { InputProps } from '../../types';
 
 const InputPassword: FC<InputProps> = ({
   value,

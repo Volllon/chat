@@ -1,7 +1,7 @@
-import React, {FC, ChangeEvent } from 'react';
+import React, { FC, ChangeEvent } from 'react';
 import getValidationStatusClass from '../../../scripts/getValidationStatusClass';
-import isValidInput from './scripts/isValidInput';
 import getTooltipAttributes from '../../../scripts/getTooltipAttributes';
+import isValidInput from './scripts/isValidInput';
 import { Props } from './types';
 
 const InputRepeatePassword: FC<Props> = ({

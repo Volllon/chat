@@ -15,6 +15,7 @@ import JoinBlock from './components/JoinBlock';
 import Chat from './components/Chat';
 import api from './api';
 import PageRegistration from './pages/PageRegistration';
+import PageAuthorization from './pages/PageAuthorization';
 
 import {
   PayloadSetUsers,
@@ -75,7 +76,7 @@ const App: FC = () => {
       <div className="container">
         <Switch>
           <Route path="/authorization">
-            <div></div>
+            <PageAuthorization />
           </Route>
           <Route path="/registration">
             <PageRegistration />

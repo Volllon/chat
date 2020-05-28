@@ -1,5 +1,5 @@
-import getTooltip from "./getTooltip";
 import { InputType } from "../types";
+import getTooltip from "./getTooltip";
 
 const getTooltipAttributes = (inputType: InputType) => {
   return {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { InputValue } from '../../types';
+import { InputValue } from '../types';
 
 export default (val: InputValue, isValidVal: boolean) => {
   const [value, setValue] = useState<InputValue>(val);

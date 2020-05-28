@@ -1,12 +1,14 @@
 import React, { FC, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
+import InputEmail from '../Inputs/InputEmail';
+import InputPassword from '../Inputs/InputPassword';
+
 import InputFirstName from './Inputs/InputFirstName';
 import useFormState from './hooks/useStateForm';
 import InputLastName from './Inputs/InputLastName';
-import InputEmail from './Inputs/InputEmail';
-import InputPassword from './Inputs/InputPassword';
 import InputRepeatePassword from './Inputs/InputRepeatePassword';
 import isValidInputRepeatePassword from './Inputs/InputRepeatePassword/scripts/isValidInput';
-import { Link } from 'react-router-dom';
 
 const FormRegistration: FC = () => {
   const {
@@ -20,29 +22,10 @@ const FormRegistration: FC = () => {
   } = useFormState();
 
   const handleClick = () => {
-    // if (state.name.length !== 0) {
-    //   cleanerApi.addCleaner({
-    //     token: String(getToken()),
-    //     cleaner: {
-    //       name: state.name,
-    //       description: state.description,
-    //       gallery: state.gallery,
-    //       services: state.services
-    //     }
-    //   }).then((response) => {
-    //     console.log(response)
-    //   });
-    // }
+    //
   }
 
   useEffect(() => {
-    // console.log(
-    //   firstName.isValid,
-    //   lastName.isValid,
-    //   email.isValid,
-    //   password.isValid,
-    //   repeatePassword.isValid
-    // )
     const isAllValidFields = 
       firstName.isValid
       && lastName.isValid
