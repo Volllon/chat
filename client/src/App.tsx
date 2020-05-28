@@ -3,12 +3,18 @@ import React, {
   useReducer,
   useEffect
 } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
 import socket from './socket';
 import reducer from './reducer';
 import JoinBlock from './components/JoinBlock';
 import Chat from './components/Chat';
 import api from './api';
+import PageRegistration from './pages/PageRegistration';
 
 import {
   PayloadSetUsers,
@@ -65,14 +71,26 @@ const App: FC = () => {
   window.socket = socket;
 
   return (
-    <div className="wrapper">
-      {
-        !state.joined
-          ? <JoinBlock onLogin={onLogin}/>
-          : <Chat onAddMessage={addMessage} {...state} />
-      }
-    </div>
+    <Router>
+      <div className="container">
+        <Switch>
+          <Route path="/authorization">
+            <div></div>
+          </Route>
+          <Route path="/registration">
+            <PageRegistration />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
 export default App;
+// <div className="wrapper">
+    //   {
+    //     !state.joined
+    //       ? <JoinBlock onLogin={onLogin}/>
+    //       : <Chat onAddMessage={addMessage} {...state} />
+    //   }
+    // </div>
