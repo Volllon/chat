@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import {
   Router,
   Switch,
@@ -20,12 +20,14 @@ import './index.css';
 const App: FC = () => {
   const [role, setRole] = useState<Role | null>(null);
 
-  getUpdatedRole().then((value) => {
-    setRole(value);
-  });
+  useEffect(() => {
+    getUpdatedRole().then((value) => {
+      setRole(value);
+    });
+  }, []);
 
   const history = createBrowserHistory();
-  
+
   return (
     <Router history={history}>
       <RoleContext.Provider value={ role }>
