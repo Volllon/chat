@@ -13,4 +13,4 @@ if (NODE_ENV === 'development') {
 export const { MONGO_URL } = process.env;
 export const { PORT } = process.env;
 export const { CLIENT } = process.env;
-
+export const { JWT } = process.env;

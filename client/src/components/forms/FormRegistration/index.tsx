@@ -1,6 +1,12 @@
 import React, { FC, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+  withRouter,
+  RouteComponentProps
+} from 'react-router-dom';
+import { AxiosResponse } from 'axios';
 
+import api from '../../../api';
 import InputEmail from '../Inputs/InputEmail';
 import InputPassword from '../Inputs/InputPassword';
 
@@ -10,7 +16,7 @@ import InputLastName from './Inputs/InputLastName';
 import InputRepeatePassword from './Inputs/InputRepeatePassword';
 import isValidInputRepeatePassword from './Inputs/InputRepeatePassword/scripts/isValidInput';
 
-const FormRegistration: FC = () => {
+const FormRegistration: FC<RouteComponentProps> = ({ history }) => {
   const {
     firstName,
     lastName,
@@ -22,7 +28,23 @@ const FormRegistration: FC = () => {
   } = useFormState();
 
   const handleClick = () => {
-    //
+    const user = {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      password: password.value
+    }
+
+    api.signup(user)
+      .then((response: AxiosResponse) => {
+        const token = response?.data?.token;
+
+        if (token) {
+          localStorage.setItem('token', token);
+          history.push('/');
+          history.go(0);
+        }
+      });
   }
 
   useEffect(() => {
@@ -39,14 +61,15 @@ const FormRegistration: FC = () => {
     lastName.isValid,
     email.isValid,
     password.isValid,
-    repeatePassword.isValid
+    repeatePassword.isValid,
+    setIsValidForm
   ]);
 
   useEffect(() => {
     repeatePassword.setIsValid(
       isValidInputRepeatePassword(repeatePassword.value, password.value)
     );
-  }, [password.value]);
+  }, [password.value, repeatePassword]);
 
   return (
     <form
@@ -99,4 +122,4 @@ const FormRegistration: FC = () => {
   );
 }
 
-export default FormRegistration;
+export default withRouter(FormRegistration);

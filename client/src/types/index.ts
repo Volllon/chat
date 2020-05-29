@@ -23,6 +23,8 @@ export type PayloadNewMessage = Message;
 export type FunctionOnLogin = (obj: PayloadJoined) => void;
 export type FunctionAddMessage = (message: PayloadNewMessage) => void;
 
+export type Role = 'unlogged' | 'user' | 'admin';
+
 declare global {
   interface Window {
     socket: SocketIOClient.Socket;

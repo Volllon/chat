@@ -1,12 +1,17 @@
 import React, { FC, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+  withRouter,
+  RouteComponentProps
+} from 'react-router-dom';
+import { AxiosResponse } from 'axios';
 
+import api from '../../../api';
 import InputEmail from '../Inputs/InputEmail';
 import InputPassword from '../Inputs/InputPassword';
-
 import useFormState from './hooks/useStateForm';
 
-const FormAuthorization: FC = () => {
+const FormAuthorization: FC<RouteComponentProps> = ({ history }) => {
   const {
     email,
     password,
@@ -15,13 +20,27 @@ const FormAuthorization: FC = () => {
   } = useFormState();
 
   const handleClick = () => {
-    //
+    const user = {
+      email: email.value,
+      password: password.value
+    }
+
+    api.signin(user)
+      .then((response: AxiosResponse) => {
+        const token = response?.data?.token;
+
+        if (token) {
+          localStorage.setItem('token', token);
+          history.push('/');
+          history.go(0);
+        }
+      });
   }
 
   useEffect(() => {
     const isAllValidFields = email.isValid && password.isValid;
     setIsValidForm(isAllValidFields ? true : false);
-  }, [email.isValid, password.isValid]);
+  }, [email.isValid, password.isValid, setIsValidForm]);
 
   return (
     <form
@@ -56,4 +75,4 @@ const FormAuthorization: FC = () => {
   );
 }
 
-export default FormAuthorization;
+export default withRouter(FormAuthorization);

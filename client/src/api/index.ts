@@ -8,13 +8,19 @@ import { RoomId } from '../types';
 
 const api = {
   signup(user: UserRegistration) {
-    return controller.post( 'api/registration', { user })
+    return controller.post( 'api/registration', user)
       .then((response) => {
         return response;
       });
   },
   signin(user: UserAuthorization) {
-    return controller.post( 'api/login', { user })
+    return controller.post( 'api/login', user)
+      .then((response) => {
+        return response;
+      });
+  },
+  verify(token: string) {
+    return controller.post('api/verify', { token })
       .then((response) => {
         return response;
       });

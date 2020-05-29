@@ -1,97 +1,53 @@
-import React, {
-  FC,
-  useReducer,
-  useEffect
-} from 'react';
+import React, { FC, useState } from 'react';
 import {
-  BrowserRouter as Router,
+  Router,
   Switch,
   Route,
 } from "react-router-dom";
+import { createBrowserHistory } from 'history';
 
-import socket from './socket';
-import reducer from './reducer';
-import JoinBlock from './components/JoinBlock';
-import Chat from './components/Chat';
-import api from './api';
+import RoleContext from './context/RoleContext';
 import PageRegistration from './pages/PageRegistration';
 import PageAuthorization from './pages/PageAuthorization';
+import PageChangeRoom from './pages/PageChangeRoom';
+import PrivateRoute from './components/PrivateRoute';
+import getUpdatedRole from './scripts/getUpdatedRole';
 
-import {
-  PayloadSetUsers,
-  FunctionOnLogin,
-  FunctionAddMessage
-} from './types';
+import { Role } from './types';
 
 import './index.css';
 
 const App: FC = () => {
-  const [state, dispatch] = useReducer(reducer, {
-    joined: false,
-    roomId: '',
-    userName: '',
-    users: [],
-    messages: []
+  const [role, setRole] = useState<Role | null>(null);
+
+  getUpdatedRole().then((value) => {
+    setRole(value);
   });
 
-  const onLogin: FunctionOnLogin = async (obj) => {
-    dispatch({
-      type: 'JOINED',
-      payload: obj,
-    });
-
-    socket.emit('ROOM:JOIN', obj);
-
-    const {data} = await api.getRoom(obj.roomId);
-
-    dispatch({
-      type: 'SET_DATA',
-      payload: data,
-    });
-  };
-
-  const setUsers = (users: PayloadSetUsers) => {
-    dispatch({
-      type: 'SET_USERS',
-      payload: users,
-    });
-  };
-
-  const addMessage: FunctionAddMessage = (message) => {
-    dispatch({
-      type: 'NEW_MESSAGE',
-      payload: message,
-    });
-  };
-
-  useEffect(() => {
-    socket.on('ROOM:SET_USERS', setUsers);
-    socket.on('ROOM:NEW_MESSAGE', addMessage);
-  }, []);
-
-  window.socket = socket;
-
+  const history = createBrowserHistory();
+  
   return (
-    <Router>
-      <div className="container">
-        <Switch>
-          <Route path="/authorization">
-            <PageAuthorization />
-          </Route>
-          <Route path="/registration">
-            <PageRegistration />
-          </Route>
-        </Switch>
-      </div>
+    <Router history={history}>
+      <RoleContext.Provider value={ role }>
+        <div className="container">
+          <Switch>
+            <PrivateRoute
+              path="/"
+              history={ history }
+              component={ PageChangeRoom }
+              exact
+            />
+            <Route path="/authorization" history={ history } exact>
+              <PageAuthorization />
+            </Route>
+            <Route path="/registration" history={ history } exact>
+              <PageRegistration />
+            </Route>
+          </Switch>
+        </div>
+      </RoleContext.Provider>
     </Router>
   );
 }
 
 export default App;
-// <div className="wrapper">
-    //   {
-    //     !state.joined
-    //       ? <JoinBlock onLogin={onLogin}/>
-    //       : <Chat onAddMessage={addMessage} {...state} />
-    //   }
-    // </div>

@@ -16,6 +16,8 @@ controller.interceptors.response.use((response) => {
     case 404:
       // fall through
     case 409:
+      // fall through
+    case 500:
       return error.response.data?.message;
     default:
       break;
