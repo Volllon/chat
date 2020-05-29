@@ -26,16 +26,20 @@
     "@types/socket.io": "^2.1.8",
     "@types/socket.io-client": "^1.4.33",
     "axios": "^0.19.2",
+    "bootstrap": "^4.5.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "socket.io": "^2.3.0",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^2.3.0",
+    "yup": "^0.29.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.8.0",
     "@testing-library/react": "^10.0.4",
     "@testing-library/user-event": "^10.3.5",
+    "@types/bootstrap": "^4.5.0",
+    "@types/yup": "^0.29.0",
     "babel-plugin-root-import": "^6.5.0",
     "customize-cra": "^0.9.1",
     "prettier": "^2.0.5",
