@@ -31,6 +31,12 @@ const api = {
         return response;
       });
   },
+  getAllRoomIds(token: string) {
+    return controller.get('api/room-list', { params: { token } })
+      .then((response) => {
+        return response;
+      });
+  },
   addUserInRoom(data: DataAddUserInRoom) {
     return controller.post('api/rooms', data)
       .then((response) => {

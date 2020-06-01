@@ -3,11 +3,11 @@ import {
   Route,
   Redirect
 } from "react-router-dom";
-import RoleContext from '../../context/RoleContext';
+import Context from '../../context';
 
 function PrivateRoute ({ component: Component, ...rest }: any) {
   let renderedComponent = null;
-  const role = useContext(RoleContext);
+  const { role } = useContext(Context);
   let isLoggedIn: boolean | null = null;
 
   if (role !== null) {

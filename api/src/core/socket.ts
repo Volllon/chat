@@ -6,7 +6,7 @@ export default (http: http.Server) => {
   const io = socket(http);
 
   io.on('connection', function (socket) {
-    socket.on('ROOM:JOIN', async ({roomId, userName}: { roomId: string, userName: string }) => {
+    socket.on('ROOM:JOIN', async ({roomId, token}: { roomId: string, token: string }) => {
       socket.join(roomId);
       const candidate = await RoomsModel.findOne({
         roomId

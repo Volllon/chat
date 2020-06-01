@@ -1,7 +1,7 @@
 import React, { FC, useReducer, useEffect } from 'react';
 
 import JoinBlock from '../../components/JoinBlock';
-import Chat from '../../components/Chat';
+import Chat from '../../components/Room';
 import reducer from '../../reducer';
 import api from '../../api';
 import socket from '../../socket';
@@ -11,25 +11,34 @@ import {
   PayloadSetUsers,
   FunctionAddMessage
 } from '~/types';
+import useUserInfo from '~/hooks/useUserInfo';
 
 const PageChangeRoom: FC = () => {
+  const userInfo = useUserInfo();
+
   const [state, dispatch] = useReducer(reducer, {
     joined: false,
     roomId: '',
-    userName: '',
+    userName: String(userInfo.userName),
     users: [],
     messages: []
   });
 
-  const onLogin: FunctionOnLogin = async (obj) => {
+  const onLogin: FunctionOnLogin = async (roomId) => {
     dispatch({
       type: 'JOINED',
-      payload: obj,
+      payload: {
+        roomId,
+        userName: state.userName
+      },
     });
 
-    socket.emit('ROOM:JOIN', obj);
+    socket.emit('ROOM:JOIN', {
+      roomId,
+      userName: state.userName
+    });
 
-    const {data} = await api.getRoom(obj.roomId);
+    const {data} = await api.getRoom(roomId);
 
     dispatch({
       type: 'SET_DATA',

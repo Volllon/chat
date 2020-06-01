@@ -44,7 +44,7 @@ export default (state: State, action: Action): State => {
         userName: action.payload.userName,
         roomId: action.payload.roomId,
       };
-
+      
     case 'SET_DATA':
       return {
         ...state,

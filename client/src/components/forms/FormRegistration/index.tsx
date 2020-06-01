@@ -1,12 +1,9 @@
 import React, { FC, useEffect } from 'react';
-import {
-  Link,
-  withRouter,
-  RouteComponentProps
-} from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { AxiosResponse } from 'axios';
 
 import api from '../../../api';
+import setToken from '../../../scripts/localStorage/setToken';
 import InputEmail from '../Inputs/InputEmail';
 import InputPassword from '../Inputs/InputPassword';
 
@@ -16,7 +13,8 @@ import InputLastName from './Inputs/InputLastName';
 import InputRepeatePassword from './Inputs/InputRepeatePassword';
 import isValidInputRepeatePassword from './Inputs/InputRepeatePassword/scripts/isValidInput';
 
-const FormRegistration: FC<RouteComponentProps> = ({ history }) => {
+const FormRegistration: FC = () => {
+  const history = useHistory();
   const {
     firstName,
     lastName,
@@ -40,13 +38,13 @@ const FormRegistration: FC<RouteComponentProps> = ({ history }) => {
         const token = response?.data?.token;
 
         if (token) {
-          localStorage.setItem('token', token);
-          history.push('/');
+          setToken(token);
+          history.push('/rooms');
           history.go(0);
         }
       });
   }
-
+  
   useEffect(() => {
     const isAllValidFields = 
       firstName.isValid
@@ -122,4 +120,4 @@ const FormRegistration: FC<RouteComponentProps> = ({ history }) => {
   );
 }
 
-export default withRouter(FormRegistration);
+export default FormRegistration;

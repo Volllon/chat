@@ -1,7 +1,7 @@
-import useGetRole from "./useGetRole";
+import useUserInfo from "./useUserInfo";
 
 export default () => {
-  const role = useGetRole();
+  const { role } = useUserInfo();
 
   if (role === null) {
     return null;

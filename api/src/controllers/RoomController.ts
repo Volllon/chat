@@ -90,6 +90,23 @@ class RoomController {
       }
     }
   };
+
+  getAllRoomIds = async (req: express.Request, res: express.Response) => {
+    const rooms = await RoomsModel.find();
+    
+    if (rooms) {
+      const roomsInfo: { id: string, roomId: string }[] = [];
+
+      rooms.forEach((room) => {
+        roomsInfo.push({
+          id: room._id,
+          roomId: room.roomId
+        });
+      });
+
+      res.json(roomsInfo);
+    }
+  };
 }
 
 export default RoomController;

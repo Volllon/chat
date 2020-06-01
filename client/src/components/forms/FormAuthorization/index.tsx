@@ -1,17 +1,15 @@
 import React, { FC, useEffect } from 'react';
-import {
-  Link,
-  withRouter,
-  RouteComponentProps
-} from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { AxiosResponse } from 'axios';
 
 import api from '../../../api';
+import setToken from '../../../scripts/localStorage/setToken';
 import InputEmail from '../Inputs/InputEmail';
 import InputPassword from '../Inputs/InputPassword';
 import useFormState from './hooks/useStateForm';
 
-const FormAuthorization: FC<RouteComponentProps> = ({ history }) => {
+const FormAuthorization: FC = () => {
+  const history = useHistory();
   const {
     email,
     password,
@@ -30,8 +28,8 @@ const FormAuthorization: FC<RouteComponentProps> = ({ history }) => {
         const token = response?.data?.token;
 
         if (token) {
-          localStorage.setItem('token', token);
-          history.push('/');
+          setToken(token);
+          history.push('/rooms');
           history.go(0);
         }
       });
@@ -75,4 +73,4 @@ const FormAuthorization: FC<RouteComponentProps> = ({ history }) => {
   );
 }
 
-export default withRouter(FormAuthorization);
+export default FormAuthorization;

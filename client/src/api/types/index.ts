@@ -1,7 +1,7 @@
-import { UserName, RoomId } from "~/types"
+import { RoomId } from "~/types"
 
 export type DataAddUserInRoom = {
-  userName: UserName;
+  token: string;
   roomId: RoomId;
 }
 

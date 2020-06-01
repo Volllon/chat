@@ -7,6 +7,8 @@ import {
   UserName,
   FunctionOnLogin
 } from '~/types';
+import getToken from '~/scripts/localStorage/getToken';
+import useUserInfo from '~/hooks/useUserInfo';
 
 type Props = {
   onLogin: FunctionOnLogin;
@@ -14,22 +16,20 @@ type Props = {
 
 const JoinBlock: FC<Props> = ({onLogin}) => {
   const [roomId, setRoomId] = useState<RoomId>('');
-  const [userName, setUserName] = useState<UserName>('');
   const [isLoading, setLoading] = useState(false);
 
   const onEnter = async () => {
-    if (!roomId || !userName) {
+    if (!roomId) {
       return alert('Wrong data');
     }
 
-    const obj = {
-      roomId,
-      userName,
-    };
+    const token = getToken();
 
-    setLoading(true);
-    await api.addUserInRoom(obj);
-    onLogin(obj);
+    if (token) {
+      setLoading(true);
+      await api.addUserInRoom({ roomId, token });
+      onLogin(roomId);
+    }
   };
 
   return (
@@ -39,12 +39,6 @@ const JoinBlock: FC<Props> = ({onLogin}) => {
         placeholder="Room ID"
         value={roomId}
         onChange={(e) => setRoomId(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Your name"
-        value={userName}
-        onChange={(e) => setUserName(e.target.value)}
       />
       <button
         className="btn btn-success"

@@ -22,13 +22,14 @@ type Props = {
   onAddMessage: FunctionAddMessage;
 }
 
-const Chat: FC<Props> = ({
+const Room: FC<Props> = ({
                            users,
                            messages,
                            userName,
                            roomId,
                            onAddMessage
                          }) => {
+  const [usersn, setUsersn] = 
   const [messageValue, setMessageValue] = useState('');
   const messagesRef = useRef<HTMLDivElement>(null);
 
@@ -96,4 +97,4 @@ const Chat: FC<Props> = ({
   );
 }
 
-export default Chat;
+export default Room;

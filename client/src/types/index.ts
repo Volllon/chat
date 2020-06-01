@@ -1,5 +1,5 @@
 export type Joined = boolean;
-export type RoomId = string;
+export type RoomName = string;
 export type UserName = string;
 export type Message = {
   userName: string;
@@ -8,7 +8,7 @@ export type Message = {
 
 export type PayloadJoined = {
   userName: UserName;
-  roomId: RoomId;
+  roomId: RoomName;
 }
 
 export type PayloadSetData = {
@@ -20,7 +20,7 @@ export type PayloadSetUsers = UserName[];
 
 export type PayloadNewMessage = Message;
 
-export type FunctionOnLogin = (obj: PayloadJoined) => void;
+export type FunctionOnLogin = (roomName: RoomName) => void;
 export type FunctionAddMessage = (message: PayloadNewMessage) => void;
 
 export type Role = 'unlogged' | 'user' | 'admin';
