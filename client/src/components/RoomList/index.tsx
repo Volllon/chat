@@ -1,8 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import api from '../../api';
 import getToken from '../../scripts/localStorage/getToken';
-import { RoomName } from '~/types';
+import { RoomName, RoomId } from '~/types';
 import { Link } from 'react-router-dom';
+import JoinBlock from '../JoinBlock';
 
 type RoomInfo = {
   id: string;
@@ -26,6 +27,7 @@ const RoomList: FC = () => {
 
   return (
     <div>
+      <JoinBlock />
       {roomsInfo.map((roomInfo) => {
         return (
           <div className="row justify-content-center">

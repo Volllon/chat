@@ -10,40 +10,76 @@ import socket from '../../socket';
 import {
   UserName,
   Message,
-  RoomId,
-  FunctionAddMessage
-} from '~/types';
+  RoomName,
+  RoomId
+} from '../../types';
+import api from '../../api';
+import { useParams } from 'react-router-dom';
+import getToken from '../../scripts/localStorage/getToken';
 
-type Props = {
-  users: UserName[];
-  messages: Message[];
-  userName: UserName;
-  roomId: RoomId;
-  onAddMessage: FunctionAddMessage;
-}
-
-const Room: FC<Props> = ({
-                           users,
-                           messages,
-                           userName,
-                           roomId,
-                           onAddMessage
-                         }) => {
-  const [usersn, setUsersn] = 
+const Room: FC = () => {
+  const { roomId } = useParams<{ roomId: RoomId}>();
+  const [roomName, setRoomName] = useState<RoomName>('');
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [users, setUsers] = useState<UserName[]>([]);
   const [messageValue, setMessageValue] = useState('');
   const messagesRef = useRef<HTMLDivElement>(null);
 
+  const updateRoom = async () => {
+
+    const token = getToken();
+
+    if (token) {
+      socket.emit('ROOM:JOIN', {
+        roomId,
+        token
+      });
+
+      const response = await api.getRoom(roomId, token);
+
+      if (response?.data) {
+        const { data } = response;
+
+        setRoomName(data.roomName);
+        setUsers(data.users);
+        setMessages(data.messages);
+      }
+    }
+  }
+
   const onSendMessage = () => {
-    socket.emit('ROOM:NEW_MESSAGE', {
-      userName,
-      roomId,
-      text: messageValue,
-    });
-    onAddMessage({userName, text: messageValue});
-    setMessageValue('');
-  };
+    const token = getToken();
+
+    if (token) {
+      socket.emit('ROOM:MESSAGE:ADD', {
+        roomId,
+        token,
+        text: messageValue
+      });
+  
+      setMessageValue('');
+    }
+  }
+
+  const addMessage = (message: Message) => {
+    console.log(messages);
+    const updatedMessages = [...messages];
+
+    updatedMessages.push(message);
+    setMessages([...updatedMessages])
+  }
 
   useEffect(() => {
+    updateRoom();
+  }, []);
+
+  useEffect(() => {
+    socket.on('ROOM:USER_LIST:UPDATE', setUsers);
+    socket.on('ROOM:MESSAGE:ADD', addMessage);
+  }, []);
+
+  useEffect(() => {
+
     messagesRef.current!.scrollTo(0, 99999);
   }, [messages]);
 
@@ -51,7 +87,7 @@ const Room: FC<Props> = ({
     <div className="chat">
 
       <div className="chat-users">
-        Room: <b>{roomId}</b>
+        Room: <b>{roomName}</b>
         <hr/>
         <b>Online ({users.length}):</b>
         <ul>

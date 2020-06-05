@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const controller = axios.create({
-  baseURL: process.env.REACT_APP_PUBLIC_URL,
+  baseURL: 'http://localhost:3000/',
   timeout: 30000
 });
 

@@ -11,9 +11,9 @@ const createRoutes = (app: express.Express, io: socket.Server) => {
 
   app.use(bodyParser.json());
 
-  app.get('/api/rooms/:id', RoomController.index);
+  app.get('/api/room/:id', RoomController.index);
   app.get('/api/room-list', RoomController.getAllRoomIds);
-  app.post('/api/rooms', RoomController.create);
+  app.post('/api/add-room', RoomController.create);
 
   app.post('/api/login', UserController.login);
   app.post('/api/registration', UserController.register);

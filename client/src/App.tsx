@@ -41,11 +41,14 @@ const App: FC = () => {
               component={ PageRoomList }
               exact
             />
-            <PrivateRoute
+            {/* <PrivateRoute
               path="/room/:roomId"
               component={ Room }
               exact
-            />
+            /> */}
+            <Route path="/room/:roomId">
+              <Room />
+            </Route>
             <Route path="/authorization" exact>
               <PageAuthorization />
             </Route>

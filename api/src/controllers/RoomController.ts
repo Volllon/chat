@@ -1,7 +1,9 @@
 import express from 'express';
 import socket from 'socket.io';
-
-import RoomsModel, {IRooms} from '../models/Rooms';
+import jwt from 'jsonwebtoken';
+import { JWT } from '../configs/env';
+import User from '../models/User';
+import RoomsModel, { IRooms } from '../models/Rooms';
 
 class RoomController {
   io: socket.Server;
@@ -11,82 +13,71 @@ class RoomController {
   }
 
   index = async (req: express.Request, res: express.Response) => {
-    const {id: roomId} = req.params;
-    const candidate = await RoomsModel.findOne({
-      roomId
+
+    const { id } = req.params;
+    const { token } = req.query;
+
+    const decoded = await jwt.verify(token, String(JWT));
+    const user = await User.findOne({
+      email: decoded.email
     });
-    if (candidate) {
-      const users = candidate.users.map(item => item.userName)
-      const obj = {
-        users,
-        messages: candidate.messages,
+
+    if (user) {
+      const room = await RoomsModel.findOne({
+        _id: String(id)
+      });
+  
+      if (room) {
+        console.log(room)
+        res.json({
+          roomName: room.roomId,
+          users: room.users.map(item => item.userName),
+          messages: room.messages,
+        });
+      } else {
+        res.json({
+          roomName: '',
+          users: [],
+          messages: [],
+        });
       }
-      res.json(obj);
-    } else {
-      const obj = {
-        roomId,
-        users: [],
-        messages: [],
-      }
-      res.json(obj);
     }
   };
 
   create = async (req: express.Request, res: express.Response) => {
-    const {roomId, userName} = req.body;
+    const { roomName, token } = req.body;
 
-    const candidate = await RoomsModel.findOne({
-      roomId
+    const decoded = await jwt.verify(token, String(JWT));
+    const user = await User.findOne({
+      email: decoded.email
     });
 
-    if (candidate) {
-      let updated: object = {users: [...candidate.users, {userName}]}
-      try {
-        await RoomsModel.findOneAndUpdate(
-          {
-            roomId,
-          },
-          {
-            $set: updated
-          },
-          {new: true},
-          (err, doc: IRooms | null) => {
-            if (err || !doc) {
-              res.status(500).json({
-                massage: err
-              })
-            } else {
-              res.status(201).json({
-                doc
-              })
-            }
-          });
-      } catch (e) {
-        res.status(500).json({
-          massage: e
-        })
-      }
-      res.status(201).json({
-        candidate
-      })
-    } else {
-
-      let newRooms = new RoomsModel({
-        roomId,
-        users: [{
-          userName
-        }],
-        messages: [],
+    if (user) {
+      const room = await RoomsModel.findOne({
+        roomId: roomName
       });
-      try {
-        await newRooms.save();
+  
+      if (room) {
         res.status(201).json({
-          newRooms
-        })
-      } catch (e) {
-        res.status(500).json({
-          massage: e
-        })
+          id: room._id
+        });
+      } else {
+        const newRoom = new RoomsModel({
+          roomId: roomName,
+          users: [],
+          messages: [],
+        });
+  
+        try {
+          await newRoom.save();
+          res.status(201).json({
+            id: newRoom._id
+          });
+        } catch (e) {
+          res.status(500).json({
+            massage: e
+          })
+        }
       }
     }
   };
@@ -95,12 +86,12 @@ class RoomController {
     const rooms = await RoomsModel.find();
     
     if (rooms) {
-      const roomsInfo: { id: string, roomId: string }[] = [];
+      const roomsInfo: { id: string, name: string }[] = [];
 
       rooms.forEach((room) => {
         roomsInfo.push({
           id: room._id,
-          roomId: room.roomId
+          name: room.roomId
         });
       });
 

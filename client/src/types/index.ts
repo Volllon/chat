@@ -1,4 +1,5 @@
 export type Joined = boolean;
+export type RoomId = string;
 export type RoomName = string;
 export type UserName = string;
 export type Message = {

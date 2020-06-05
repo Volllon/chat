@@ -2,24 +2,19 @@ import React, {FC, useState} from 'react';
 
 import api from '../../api';
 
-import {
-  RoomId,
-  UserName,
-  FunctionOnLogin
-} from '~/types';
+import { RoomName } from '~/types';
 import getToken from '~/scripts/localStorage/getToken';
-import useUserInfo from '~/hooks/useUserInfo';
+import { useHistory } from 'react-router-dom';
 
-type Props = {
-  onLogin: FunctionOnLogin;
-}
-
-const JoinBlock: FC<Props> = ({onLogin}) => {
-  const [roomId, setRoomId] = useState<RoomId>('');
+const JoinBlock: FC = () => {
+  const history = useHistory();
+  const [roomName, setRoomName] = useState<RoomName>('');
   const [isLoading, setLoading] = useState(false);
 
   const onEnter = async () => {
-    if (!roomId) {
+    const newRoomName = roomName.trim();
+
+    if (!newRoomName) {
       return alert('Wrong data');
     }
 
@@ -27,8 +22,12 @@ const JoinBlock: FC<Props> = ({onLogin}) => {
 
     if (token) {
       setLoading(true);
-      await api.addUserInRoom({ roomId, token });
-      onLogin(roomId);
+      const response = await api.addRoom(newRoomName, token);
+
+      if (response?.data) {
+        history.push(`/room/${response.data.id}`);
+        history.go(0);
+      }
     }
   };
 
@@ -36,9 +35,9 @@ const JoinBlock: FC<Props> = ({onLogin}) => {
     <div className="join-block">
       <input
         type="text"
-        placeholder="Room ID"
-        value={roomId}
-        onChange={(e) => setRoomId(e.target.value)}
+        placeholder="Room name"
+        value={roomName}
+        onChange={(e) => setRoomName(e.target.value)}
       />
       <button
         className="btn btn-success"

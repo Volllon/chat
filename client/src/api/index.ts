@@ -4,7 +4,7 @@ import {
   UserAuthorization,
   DataAddUserInRoom
 } from './types';
-import { RoomId } from '../types';
+import { RoomName, RoomId } from '../types';
 
 const api = {
   signup(user: UserRegistration) {
@@ -25,8 +25,8 @@ const api = {
         return response;
       });
   },
-  getRoom(roomId: RoomId) {
-    return controller.get(`api/rooms/${roomId}`)
+  getRoom(id: RoomId, token: string) {
+    return controller.get(`api/room/${id}`, { params: { token } })
       .then((response) => {
         return response;
       });
@@ -37,8 +37,8 @@ const api = {
         return response;
       });
   },
-  addUserInRoom(data: DataAddUserInRoom) {
-    return controller.post('api/rooms', data)
+  addRoom(roomName: RoomName, token: string) {
+    return controller.post('api/add-room', { roomName, token })
       .then((response) => {
         return response;
       });
